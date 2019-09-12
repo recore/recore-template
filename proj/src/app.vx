@@ -1,0 +1,4 @@
+<RouterView />
+<footer class="info">
+  <p>你可以双击编辑 TODO</p>
+</footer>

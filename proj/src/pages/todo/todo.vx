@@ -1,0 +1,43 @@
+<section className="todoapp">
+  <header className="header">
+    <h1>TODO</h1>
+    <input className="new-todo"
+      autoFocus autoComplete="off"
+      placeholder="What needs to be done?"
+      x-model={newTodo}
+      @keyUp.enter={add} />
+  </header>
+
+  <section className="main" x-if={todoList.length}>
+    <input className="toggle-all" type="checkbox" x-model={allDone}/>
+    <ul class="todo-list">
+      <li x-for={item in todosByStatus} className={{ completed: item.completed, editing: item.edit }} x-area>
+        <div className="view" >
+          <input className="toggle" type="checkbox" x-model={item.completed} />
+          <label @doubleClick="edit">{item.title}</label>
+          <button className="destroy" @click={remove(item)}></button>
+        </div>
+        <input autoFocus className="edit" type="text"
+          x-if={item.edit}
+          ref={(inputDOMNode) => editing = inputDOMNode}
+          x-model={item.title}
+          @keyUp={update($event, item)}
+          @blur={update($event, item)} />
+      </li>
+    </ul>
+  </section>
+
+  <footer className="footer" x-if={todoList.length}>
+    <span className="todo-count">
+      <strong>任务数量 {todosByStatus.length} 个</strong>
+    </span>
+    <ul class="filters">
+      <li><Link to="/all" className.selected={status === 'all'}>全部</Link></li>
+      <li><Link to="/active" className.selected={status === 'active'}>未完成</Link></li>
+      <li><Link to="/completed" className.selected={status === 'completed'}>已完成</Link></li>
+    </ul>
+    <button class="clear-completed" @click={removeCompleted} x-if={hasItemCompleted}>
+      清除已完成
+    </button>
+  </footer>
+</section>
